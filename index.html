@@ -1,7 +1,120 @@
 <!DOCTYPE html>
 <html>
-<body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
-</body>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="generator" content="Senya Pugach">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="(Copy) привет, я миша 👋">
+    <meta content="студия лебедева, сбер" name="description">
+    <meta content="дизайнер, дизайн, веб-дизайн, студия артемия лебедева, сбербанк, портфолио, сегеда, сайты, ui/ux, branding, design, web, interfaces, po" name="keywords">
+    <meta content="привет, я миша 👋" property="og:site_name">
+    <meta content="./i/1.jpg" property="og:image">
+    <meta content="привет, я миша 👋" property="og:title">
+    <meta content="работаю в студии лебедева" property="og:description">
+
+    <title>привет, я миша 👋</title>
+
+    <style>
+body {
+  margin: 0;
+  background: rgb(255, 114, 0);
+}
+
+.backgrounds {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-size: cover;
+  opacity: 0;
+  transition: opacity ease-in 250ms;
+}
+
+.links {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.link {
+  display: block;
+  margin-bottom: 8vh;
+  color: #000;
+  font-size: 3.5vw;
+  text-align: center;
+  font-family: 'Helvetica', sans-serif;
+}
+
+.link:last-of-type {
+  margin-bottom: 0;
+}
+
+@media (max-device-width: 768px) {
+  body {
+    background-image: url('./i/mobile.gif');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .link {
+    margin-bottom: 6vh;
+    font-size: 6.5vw;
+  }
+}
+    </style>
+  </head>
+  
+  <body>
+    <div class="backgrounds">
+      <div class="background" style="background-image: url('./i/1.jpg')"></div>
+      <div class="background" style="background-image: url('./i/2.jpg')"></div>
+      <div class="background" style="background-image: url('./i/3.jpg')"></div>
+      <div class="background" style="background-image: url('./i/4.jpg')"></div>
+    </div>
+
+    <div class="links">
+      <a href="https://artlebedev.ru/segeda" class="link" target="_blank">artlebedev.ru/segeda</a>
+      <a href="https://behance.net/segeda" class="link" target="_blank">behance.net/segeda</a>
+      <a href="https://sberbank.ru/design" class="link" target="_blank">sberbank.ru/design</a>
+      <a href="mailto:misha.segeda@gmail.com" class="link" target="_blank">misha.segeda@gmail.com</a>
+    </div>
+
+    <script>
+const isMobile = /Mobi/i.test(window.navigator.userAgent);
+
+const links = document.querySelectorAll('.link');
+if (!isMobile) {
+  links.forEach(l => l.addEventListener('mouseenter', onLinkMouseEnter));
+  links.forEach(l => l.addEventListener('mouseleave', onLinkMouseLeave));
+}
+
+const backgrounds = document.querySelectorAll('.background');
+
+function onLinkMouseEnter() {
+  const index = Object.values(links).indexOf(this);
+
+  backgrounds[index].style.opacity = 1;
+
+  backgrounds.forEach((b, i) => {
+    if (i !== index) {
+      b.style.opacity = 0;      
+    }
+  });
+}
+
+function onLinkMouseLeave() {
+  backgrounds.forEach(b => b.style.opacity = 0);
+}
+    </script>
+  </body>
 </html>
