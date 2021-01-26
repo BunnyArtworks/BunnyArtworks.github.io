@@ -61,6 +61,13 @@ body {
   margin-bottom: 0;
 }
 
+img.link {
+  height: 15vw;
+  margin: auto;
+  margin-top: -5vh !important;
+  margin-bottom: 8vh !important;
+}
+
 @media (max-device-width: 768px) {
   body {
     background-image: url('./i/mobile.gif');
@@ -71,6 +78,13 @@ body {
   .link {
     margin-bottom: 6vh;
     font-size: 6.5vw;
+  }
+
+  img.link {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-top: -4vh !important;
   }
 }
     </style>
@@ -88,13 +102,14 @@ body {
       <a href="https://artlebedev.ru/segeda" class="link" target="_blank">artlebedev.ru/segeda</a>
       <a href="https://behance.net/segeda" class="link" target="_blank">behance.net/segeda</a>
       <a href="https://sberbank.ru/design" class="link" target="_blank">sberbank.ru/design</a>
+      <img src="./i/sber.png" class="link">
       <a href="mailto:misha.segeda@gmail.com" class="link" target="_blank">misha.segeda@gmail.com</a>
     </div>
 
     <script>
 const isMobile = /Mobi/i.test(window.navigator.userAgent);
 
-const links = document.querySelectorAll('.link');
+const links = document.querySelectorAll('a.link');
 if (!isMobile) {
   links.forEach(l => l.addEventListener('mouseenter', onLinkMouseEnter));
   links.forEach(l => l.addEventListener('mouseleave', onLinkMouseLeave));
