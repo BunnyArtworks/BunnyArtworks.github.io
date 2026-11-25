@@ -115,11 +115,10 @@ h1{font-size:52px;line-height:.96;letter-spacing:-1.04px;font-weight:900;min-hei
 .columns.inspecting .col::before{opacity:var(--emphasis,1);transition-duration:300ms,300ms,120ms}
 .col[aria-pressed="true"]::after{width:min(50%,8px);height:auto;aspect-ratio:1;top:calc(100% - var(--height) + 4px);bottom:auto}
 .col.too-short::after{display:none}
-.chart.entering .tooltip{transform-origin:var(--origin) 100%;animation:grow-pill 700ms var(--ease) both}
+.chart.entering .bubble-layer{transform-origin:var(--anchor-x) var(--anchor-y);animation:grow-bubble 700ms var(--ease)}
 .chart.entering .tip-top{animation:reveal-content 260ms 460ms ease both}
 .chart.entering #gauge svg circle:last-child{animation:fill-arc 800ms 500ms cubic-bezier(.25,.7,.25,1) both}
-@keyframes grow-leg{from{transform:scaleY(0)}to{transform:scaleY(1)}}
-@keyframes grow-pill{from{transform:translateY(var(--leg)) scale(.15,.6);border-radius:100px}to{transform:none}}
+@keyframes grow-bubble{from{transform:scale(.15,.25)}to{transform:scale(1)}}
 @keyframes reveal-content{from{opacity:0}to{opacity:1}}
 @keyframes fill-arc{from{stroke-dasharray:0 100}to{stroke-dasharray:var(--arc) 100}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-delay:0ms!important;transition-duration:.01ms!important;transition-delay:0ms!important}}
@@ -161,7 +160,6 @@ body:has(dialog[open]){overflow:hidden}
 .bubble-layer .tooltip{box-shadow:none;pointer-events:auto;border-radius:34px}
 .chart .tooltip,.chart .tooltip[aria-expanded="true"]{top:var(--pill-y);left:var(--tip-left)}
 .connector{position:absolute;left:0;width:100%;fill:white;overflow:visible;pointer-events:none}
-.chart.entering .connector{transform-origin:bottom;animation:grow-leg 700ms var(--ease) both}
 .columns,.columns .col{-webkit-tap-highlight-color:transparent}
 .columns .col{appearance:none}
 .columns .col:focus:not(:focus-visible){outline:none}
@@ -265,6 +263,8 @@ dialog.small-sheet[open]{display:flex;flex-direction:column}
 .footer-columns h3{color:#262633}.footer-stores img+img{margin-top:8px}
 .feed-wellness{padding-top:12px;margin-top:-12px}
 .health-card:nth-child(-n+3) img{width:60px;margin-left:-8px}
+/* The title canvas bleeds above its box. Keep the help control above it. */
+.eyebrow .hint{position:relative;z-index:6}
 #sheet-heading{position:relative}
 .title-motion-viewport{position:absolute;inset:-16px 0;overflow-x:visible;overflow-y:clip;pointer-events:none;visibility:hidden}
 .title-motion-viewport canvas{position:absolute;display:block}
@@ -790,8 +790,8 @@ function positionTooltip() {
   const top = Math.min(expanded ? -146-extra : 0,footY-33.5-pillHeight+1);
   chart.style.setProperty('--tip-left',left+'px');
   chart.style.setProperty('--pill-y',top+'px');
-  chart.style.setProperty('--origin',(center-left)+'px');
-  chart.style.setProperty('--leg',(footY-top-pillHeight+1)+'px');
+  chart.style.setProperty('--anchor-x',center+'px');
+  chart.style.setProperty('--anchor-y',footY+'px');
   cancelAnimationFrame(connectorFrame);
   drawConnector();
   // Track the interpolated pill bounds and bar height during disclosure and day changes.
