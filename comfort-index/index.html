@@ -97,8 +97,8 @@ h1{font-size:52px;line-height:.96;letter-spacing:-1.04px;font-weight:900;min-hei
 
 .entry-score svg{position:absolute;inset:0}
 
-.entry:active,.days button:active,.report button:active{transform:scale(.97)}
-.entry,.days button,.report button{transition:transform 140ms ease-out}
+.days button:active,.report button:active{transform:scale(.97)}
+.days button,.report button{transition:transform 140ms ease-out}
 .chart.has-hazard .tooltip[aria-expanded="true"]{height:278px}.chart{--speed:280ms;--ease:cubic-bezier(.22,.72,.25,1)}
 .chart.open-details{--speed:360ms}
 .tooltip,.tooltip[aria-expanded="true"]{overflow:hidden;height:68px}
@@ -139,7 +139,10 @@ dialog[open]::backdrop{animation:veil-in 240ms ease-out}
   .entry,.day-alert{flex-basis:calc(100% - 15px)}
 }
 body:has(dialog[open]){overflow:hidden}
-.entry{position:relative;isolation:isolate;overflow:hidden;background:#f4fbff}
+.entry{position:relative;isolation:isolate;overflow:hidden;background:#f4fbff;-webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent}
+.entry::after{content:"";position:absolute;inset:0;border-radius:inherit;background:#242434;opacity:0;pointer-events:none;transition:opacity 100ms ease-out}
+.entry:active::after{opacity:.035;transition-duration:0s}
+.entry:focus-visible{outline-offset:-2px}
 .entry-wash{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
 .hours{gap:24px;padding:16px 20px;margin-top:0;align-items:start}
 .hours>div{flex:0 0 44px;min-width:44px;height:90px;display:grid;grid-template-rows:20px 46px 22px;gap:1px;line-height:20px}
