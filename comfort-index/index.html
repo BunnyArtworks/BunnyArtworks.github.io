@@ -423,7 +423,8 @@ const researchDays = {
     overrides:{10:{wind:8,rain:2},11:{feels:15,wind:4.2,rain:2,hazard:'thunder'},12:{wind:8,rain:2,hazard:'thunder'}}}
 };
 const params = new URLSearchParams(location.search);
-const winterPickup = params.get('scenario') === 'winter-pickup';
+const winterRed = params.get('scenario') === 'winter-pickup-red';
+const winterPickup = winterRed || params.get('scenario') === 'winter-pickup';
 const forecastStart = winterPickup ? Date.UTC(2026,10,26) : Date.UTC(2026,5,15);
 function forecastDate(offset) { return new Date(forecastStart + offset*86400000); }
 if (winterPickup) {
@@ -442,6 +443,14 @@ if (winterPickup) {
   ];
 }
 if (Object.hasOwn(researchDays,params.get('scenario'))) scenario.days[0] = researchDays[params.get('scenario')];
+if (winterRed) {
+  Object.assign(scenario.days[0], {
+    sleet:[10,11,12,13,14],
+    temps:[-3,-3,-3,-3,-3,-3,-3,-2,-2,-2,-1,-1,-1,-1,-1,-2,-2,-2,-1,-1,-1,-1,-1,-1],
+    feels:[-7,-7,-7,-7,-8,-8,-9,-9,-9,-10,-10,-10,-9,-9,-8,-8,-7,-6,-4,-1,-1,-1,-1,-1],
+    winds:[4,4,4,4.5,5,6,7,8,9,10.5,11.6,12,11.2,10.6,9.6,9,8,7,4.7,1,1,1,1,1]
+  });
+}
 
 // Ссылка задаёт условия на текущий час. Температура и ветер плавно меняются и в соседние часы.
 const limits = {temp:[-55,55],feels:[-65,65],wind:[0,60],rain:[0,2],snow:[0,2],uv:[0,15]};
@@ -487,7 +496,15 @@ function rateWeather({feels,wind,rain,snow,uv,hazard}) {
   const score = Math.max(0,100-factors.reduce((sum,f)=>sum+f.points,0));
   return {score,factors};
 }
-function entryText(reading) {
+function entryText(reading,hours,now) {
+  if (winterRed && reading.score<30) {
+    const end = hours.findIndex((h,i)=>i>now && h.score>=30);
+    const until = end<0 ? 'до полуночи' : 'до '+hourLabel(end);
+    const why = reading.wind>=8 && reading.feels<0
+      ? 'сильный ветер, ощущается как '+signedTemperature(reading.feels)
+      : reading.factors.slice(0,2).map(f=>f.reason).join(' и ');
+    return 'Сейчас и '+until+' на улице плохо: '+why;
+  }
   const reasons = reading.factors.slice(0,2).map(f=>f.reason);
   if (reading.score>=80 && reasons.length===1 && reading.feels>=18 && reading.feels<=24) reasons.unshift('тепло');
   const why = reasons.length ? reasons.join(' и ') : 'тепло и почти без ветра';
@@ -946,7 +963,7 @@ const current = hoursToday[now];
 const currentScore = current.score;
 const tone = assessment(currentScore).ring;
 byId('entry-value').textContent = currentScore;
-byId('entry-label').textContent = entryText(current);
+byId('entry-label').textContent = entryText(current,hoursToday,now);
 byId('entry-arc').setAttribute('stroke-dasharray', currentScore + ' 100');
 byId('entry-arc').setAttribute('stroke', tone);
 byId('entry-arc').style.display = currentScore ? '' : 'none';
